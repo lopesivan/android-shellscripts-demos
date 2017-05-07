@@ -35,3 +35,4 @@ parando
 ```sh
 adb shell ps | grep jackpal.androidterm|  awk '{print $2}'| xargs -I{} adb shell "su -c 'kill -2 {}'"
 ```
+adb logcat -d -b events | grep "boot"

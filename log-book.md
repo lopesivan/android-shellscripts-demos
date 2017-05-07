@@ -24,3 +24,10 @@ to **"testmsg"** using the following commands:
 
 Now in the Terminal Emulator, just enter the name of the file and the script
 will execute.
+
+
+Iniciando o shell
+
+```sh
+    adb shell am start -n jackpal.androidterm/.Term
+```

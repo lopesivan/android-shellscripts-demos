@@ -13,7 +13,7 @@ No meu computador tenho a seguinte saída do comando date:
     20170507.033758
 ```
 
-### Vamos as nossas tentativas de alterar a a data/hora do sistema.
+### Vamos para nossas tentativas de alterar a a data/hora do sistema.
 
 * O comando adb recebendo como parametro a data a ser configurada.
 

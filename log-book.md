@@ -31,3 +31,7 @@ Iniciando o shell
 ```sh
     adb shell am start -n jackpal.androidterm/.Term
 ```
+parando
+```sh
+adb shell ps | grep jackpal.androidterm|  awk '{print $2}'| xargs -I{} adb shell "su -c 'kill -2 {}'"
+```

@@ -1,0 +1,96 @@
+* [Creditos](#creditos)
+* [Propaganda](#propaganda)
+* [Licença](#licença)
+
+
+Only for rooted devices: If you want the script to be run directly as a
+command, place the script in **/system/bin** (or) **/system/xbin** . Then make the
+file executable by running the following command:
+
+```sh
+    sh
+    su
+    mount -o rw,remount /system
+    cp <script_path>/<script_name> /system/bin/<script_name>
+    chmod 555 /system/bin/<script_name>
+```
+
+For example I have copied the script **"testmsg.sh"** to **/system/bin**, renamed it
+to **"testmsg"** using the following commands:
+
+```
+    su/
+    mount -o rw,remount /system
+    cp /storage/sdcard0/sh/testmsg.sh /system/bin/testmsg
+    chmod 555 /system/bin/testmsg (chmod +x did not work, giving me a bad mode error)
+```
+
+Now in the Terminal Emulator, just enter the name of the file and the script
+will execute.
+
+## Creditos
+
+Todos os créditos e e inspirações pertencem aos seguintes projetos:
+* [android-native-exe-demo](https://github.com/gimite/android-native-exe-demo)
+* [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc)
+
+## Propaganda
+
+Gostou do projeto `android-shellscripts-demos`? Então siga o repositório no
+[GitHub](https://github.com/lopesivan/android-shellscripts-demos)
+e vote nele, mas se você estiver se sentindo animado, siga o
+[blog](http://42algoritmos.com.br/blog/iczar) do programador
+[iczar](https://keybase.io/iczar) ou acompanhe no
+[GitHub](https://github.com/lopesivan) seus projetos.
+
+## Licença
+
+Copyright (c) ICzar.  Distribuido dentro dos mesmos termos da licença
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
+PACKAGE=jackpal.androidterm
+
+adb shell am start -n jackpal.androidterm/.ActivityName
+
+
+	
+linux/mac users can also create a script to run an apk with something like the following:
+
+create a file named "adb-run.sh" with these 3 lines:
+
+pkg=$(aapt dump badging $1|awk -F" " '/package/ {print $2}'|awk -F"'" '/name=/ {print $2}')
+act=$(aapt dump badging $1|awk -F" " '/launchable-activity/ {print $2}'|awk -F"'" '/name=/ {print $2}')
+adb shell am start -n $pkg/$act
+then "chmod +x adb-run.sh" to make it executable.
+
+now you can simply:
+
+adb-run.sh myapp.apk
+
+The benefit here is that you don't need to know the package name or launchable activity name. Similarly, you can create "adb-uninstall.sh myapp.apk"
+
+Note: This requires that you have aapt in your path. You can find it under the new build tools folder in the SDK.
+
+
+open ~/.bash_profile and add these bash functions to the end of the file
+
+function androidinstall(){
+   adb install -r ./bin/$1.apk
+}
+function androidrun(){
+   ant clean debug
+   adb shell am start -n $1/$1.$2
+}
+then open the Android project folder
+
+androidinstall app-debug && androidrun com.example.app MainActivity
+
+up vote
+10
+down vote
+We can as well start an application by knowing application type and feeding it with data:
+
+adb shell am start -d "file:///sdcard/sample.3gp" -t "video/3gp" -a android.intent.action.VIEW
+This command displays available Video Players to play sample.3gp file
+
+

@@ -84,3 +84,13 @@ function androidrun(){
 then open the Android project folder
 
 androidinstall app-debug && androidrun com.example.app MainActivity
+
+up vote
+10
+down vote
+We can as well start an application by knowing application type and feeding it with data:
+
+adb shell am start -d "file:///sdcard/sample.3gp" -t "video/3gp" -a android.intent.action.VIEW
+This command displays available Video Players to play sample.3gp file
+
+

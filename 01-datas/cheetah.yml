@@ -1,0 +1,10 @@
+# caminho onde se localiza o template
+type: "new"
+# O nome do template
+cheetah: "android.sh"
+
+# Os campos chave valor que serão usados
+data: { 'chave1': descrição,
+        'chave2': como usar,
+        'chave3': "mantenedor" }
+

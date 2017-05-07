@@ -94,3 +94,63 @@ adb shell am start -d "file:///sdcard/sample.3gp" -t "video/3gp" -a android.inte
 This command displays available Video Players to play sample.3gp file
 
 
+
+While looking around my Android filesystem, I found that it did, in fact have a `/etc/init.d/` directory. After peeking around in there, I found `/etc/init.d/20userinit` with the following lines:
+
+    if [ -e /data/local/userinit.sh ];
+    then 
+        log -p -i -t userinit "Executing /data/local/userinit.sh";
+        busybux chmod +x /data/local/userinit.sh;
+        logwrapper /system/bin/sh /data/local/userinit.sh;
+        setprop cm.userinit.active 1;
+    fi;
+
+This being, of course, _exactly_ what I needed, I wrote the following script on my computer then pushed it to my device:
+
+    #!/system/bin/sh 
+    
+    dropbear -s -g 
+
+(pushed to device via `scp userinit.sh phone:/data/local/userinit.sh`, mind you :] )
+
+Rebooted the device, then ran `ps | grep "[d]ropbear"`, and sure enough, it's running. Coolness!
+
+
+Look to `/etc/` directory. Usually it is placed in `/system/` partition which you can mount as RW:
+
+    $ ls -l /etc
+    lrwxrwxrwx 1 root root 11 Jan 1  2009 /etc -> /system/etc
+    $ su
+    $ mount -o remount,rw /system
+    $ chmod o+w /system/etc  # for "adb push"
+
+Some above steps may be replaces with:
+
+    $ adb root
+    $ adb remount
+
+and later remount RO:
+
+    $ chmod o-w /system/etc
+    $ mount -o remount,ro /system
+
+Now your task to find executable or `*rc` file which you modify to achieve your goal:
+
+    $ find /etc -type f -perm +110
+    $ find /etc -name "*rc"
+    $ find /etc -name "init*"
+    $ grep -R /data /etc
+    $ grep -R /system /etc
+
+Google about each candidate to get know how this file was used.
+
+Good candidate for including custom scripts are lines from:
+
+    $ grep service /init*.rc
+
+As each device unique you may need to do own guess about search criteria...
+
+For example I found `/etc/mkshrc` which used by Korn shell. I update this file to extend `PATH` env var and now each time I do `adb shell` I have Busybox symlinks in my PATH!
+
+See also **hard way** (if you have no luck with finding *magic* file): http://stackoverflow.com/questions/9768103/make-persistent-changes-to-init-rc
+

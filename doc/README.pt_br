@@ -47,3 +47,40 @@ e vote nele, mas se você estiver se sentindo animado, siga o
 
 Copyright (c) ICzar.  Distribuido dentro dos mesmos termos da licença
 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
+PACKAGE=jackpal.androidterm
+
+adb shell am start -n jackpal.androidterm/.ActivityName
+
+
+	
+linux/mac users can also create a script to run an apk with something like the following:
+
+create a file named "adb-run.sh" with these 3 lines:
+
+pkg=$(aapt dump badging $1|awk -F" " '/package/ {print $2}'|awk -F"'" '/name=/ {print $2}')
+act=$(aapt dump badging $1|awk -F" " '/launchable-activity/ {print $2}'|awk -F"'" '/name=/ {print $2}')
+adb shell am start -n $pkg/$act
+then "chmod +x adb-run.sh" to make it executable.
+
+now you can simply:
+
+adb-run.sh myapp.apk
+
+The benefit here is that you don't need to know the package name or launchable activity name. Similarly, you can create "adb-uninstall.sh myapp.apk"
+
+Note: This requires that you have aapt in your path. You can find it under the new build tools folder in the SDK.
+
+
+open ~/.bash_profile and add these bash functions to the end of the file
+
+function androidinstall(){
+   adb install -r ./bin/$1.apk
+}
+function androidrun(){
+   ant clean debug
+   adb shell am start -n $1/$1.$2
+}
+then open the Android project folder
+
+androidinstall app-debug && androidrun com.example.app MainActivity

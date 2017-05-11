@@ -19,7 +19,7 @@ test -n "$DEBUG" && set -x
 #       Phone: +1 561 801 7985
 #    Language: Shell Script
 #        File: a.sh
-#        Date: Dom 07 Mai 2017 06:17:37 BRT
+#        Date: Qui 11 Mai 2017 16:27:17 BRT
 # Description:
 # ----------------------------------------------------------------------------
 # Modo strict
@@ -32,11 +32,12 @@ set -euo pipefail
 
 # ----------------------------------------------------------------------------
 # Run!
-adb shell
+data=$(date +%Y%m%d.%H%M%S)
+adb shell << .quit
 su
-cd /data
+date -s $data
 pwd
+
 .quit
-
 # ----------------------------------------------------------------------------
 exit 0
